@@ -51,25 +51,35 @@ namespace OAuth2
         {
             get
             {
-                var types = this.GetClientTypes().ToList();
+                    var types = this.GetClientTypes().ToList();
                 Func<ClientConfiguration, Type> getType = 
-                    configuration => types.FirstOrDefault(x => x.Name == configuration.ClientTypeName);
+                        configuration => types.FirstOrDefault(x => x.Name == configuration.ClientTypeName);
 
-                return
-                    _configurationSection.Services.AsEnumerable()
-                                        .Where(configuration => configuration.IsEnabled)
-                                        .Select(configuration => new { configuration, type = getType(configuration) })
-                                        .Where(o => o.type != null)
+                    return
+                        _configurationSection.Services.AsEnumerable()
+                                            .Where(configuration => configuration.IsEnabled)
+                                            .Select(configuration => new { configuration, type = getType(configuration) })
+                                            .Where(o => o.type != null)
                                         .Select(o => (IClient)Activator.CreateInstance(o.type, _requestFactory, o.configuration));                
-            }
-        }
+                }
+                }
 
         /// <summary>
         /// Returns collection of client types to consider
         /// </summary>        
         protected virtual IEnumerable<Type> GetClientTypes()
         {
-          return AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(IClient).IsAssignableFrom(p));
+            foreach (var ass in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] types = null;
+                try { types = ass.GetTypes(); }
+                catch { }
+
+                if (types != null)
+                    foreach (var t in types)
+                        if (typeof(IClient).IsAssignableFrom(t))
+                            yield return t;
+            }
         }
     }
 }
