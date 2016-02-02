@@ -88,6 +88,8 @@ namespace OAuth2.Client.Impl
                 Id = response["id"].Value<string>(),
                 FirstName = response["first_name"].Value<string>(),
                 LastName = response["last_name"].Value<string>(),
+                UpdatedTime = response["updated_time"].Value<string>(),
+                Locale = response["locale"].Value<string>(),
                 Email = response["emails"]["preferred"].SafeGet(x => x.Value<string>()),
                 AvatarUri =
                     {

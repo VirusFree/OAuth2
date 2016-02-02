@@ -89,6 +89,7 @@ namespace OAuth2.Client.Impl
                 Email = response["email"].SafeGet(x => x.Value<string>()),
                 FirstName = response["given_name"].Value<string>(),
                 LastName = response["family_name"].Value<string>(),
+                Locale = response["locale"].Value<string>(),
                 AvatarUri =
                     {
                         Small = !string.IsNullOrWhiteSpace(avatarUri) ? string.Format(avatarUriTemplate, avatarUri, AvatarInfo.SmallSize) : string.Empty,

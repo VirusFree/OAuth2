@@ -51,6 +51,8 @@ namespace OAuth2.Client.Impl
                     Email = cnt["email"].SafeGet(x => x.Value<string>()),
                     ProviderName = this.Name,
                     Id = cnt["id"].Value<string>(),
+                    UpdatedTime = cnt["updated_at"].Value<string>(),
+                    CreatedTime = cnt["created_at"].Value<string>(),
                     FirstName = names.Count > 0 ? names.First() : cnt["login"].Value<string>(),
                     LastName = names.Count > 1 ? names.Last() : string.Empty,
                     AvatarUri =

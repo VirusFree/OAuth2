@@ -73,6 +73,11 @@ namespace OAuth2.Models
             get { return AvatarUri.Normal; }
         }
 
+        public string UpdatedTime { get; set; }
+        public string CreatedTime { get; set; }
+
+        public string Locale { get; set; }
+
         /// <summary>
         /// Contains URIs of different sizes of avatar.
         /// </summary>
