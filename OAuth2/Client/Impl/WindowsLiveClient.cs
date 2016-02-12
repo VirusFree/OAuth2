@@ -85,17 +85,17 @@ namespace OAuth2.Client.Impl
             const string avatarUriTemplate = @"https://cid-{0}.users.storage.live.com/users/0x{0}/myprofile/expressionprofile/profilephoto:Win8Static,{1},UserTileStatic/MeControlXXLUserTile?ck=2&ex=24";
             return new UserInfo
             {
-                Id = response["id"].Value<string>(),
-                FirstName = response["first_name"].Value<string>(),
-                LastName = response["last_name"].Value<string>(),
-                UpdatedTime = response["updated_time"].Value<string>(),
-                Locale = response["locale"].Value<string>(),
-                Email = response["emails"]["preferred"].SafeGet(x => x.Value<string>()),
+                Id = response["id"]?.Value<string>(),
+                FirstName = response["first_name"]?.Value<string>(),
+                LastName = response["last_name"]?.Value<string>(),
+                UpdatedTime = response["updated_time"]?.Value<string>(),
+                Locale = response["locale"]?.Value<string>(),
+                Email = response["emails"]["preferred"]?.SafeGet(x => x.Value<string>()),
                 AvatarUri =
                     {
-                        Small = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileSmall"),
-                        Normal = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileSmall"),
-                        Large = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileLarge")
+                        Small = string.Format(avatarUriTemplate, response["id"]?.Value<string>(), "UserTileSmall"),
+                        Normal = string.Format(avatarUriTemplate, response["id"]?.Value<string>(), "UserTileSmall"),
+                        Large = string.Format(avatarUriTemplate, response["id"]?.Value<string>(), "UserTileLarge")
                     }
             };
         }

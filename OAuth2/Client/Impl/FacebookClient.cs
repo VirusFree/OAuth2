@@ -85,10 +85,10 @@ namespace OAuth2.Client.Impl
             var avatarUri = response["picture"]["data"]["url"].Value<string>();
             return new UserInfo
             {
-                Id = response["id"].Value<string>(),
-                FirstName = response["first_name"].Value<string>(),
-                LastName = response["last_name"].Value<string>(),
-                Email = response["email"].SafeGet(x => x.Value<string>()),
+                Id = response["id"]?.Value<string>(),
+                FirstName = response["first_name"]?.Value<string>(),
+                LastName = response["last_name"]?.Value<string>(),
+                Email = response["email"]?.SafeGet(x => x.Value<string>()),
                 AvatarUri =
                 {
                     Small = !string.IsNullOrWhiteSpace(avatarUri) ? string.Format(avatarUriTemplate, avatarUri, "small") : string.Empty,

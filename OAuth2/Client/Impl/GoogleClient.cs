@@ -85,11 +85,11 @@ namespace OAuth2.Client.Impl
             const string avatarUriTemplate = "{0}?sz={1}";
             return new UserInfo
             {
-                Id = response["id"].Value<string>(),
-                Email = response["email"].SafeGet(x => x.Value<string>()),
-                FirstName = response["given_name"].Value<string>(),
-                LastName = response["family_name"].Value<string>(),
-                Locale = response["locale"].Value<string>(),
+                Id = response["id"]?.Value<string>(),
+                Email = response["email"]?.SafeGet(x => x.Value<string>()),
+                FirstName = response["given_name"]?.Value<string>(),
+                LastName = response["family_name"]?.Value<string>(),
+                Locale = response["locale"]?.Value<string>(),
                 AvatarUri =
                     {
                         Small = !string.IsNullOrWhiteSpace(avatarUri) ? string.Format(avatarUriTemplate, avatarUri, AvatarInfo.SmallSize) : string.Empty,
