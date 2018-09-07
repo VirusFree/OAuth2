@@ -12,6 +12,7 @@ namespace OAuth2
     {
         private readonly IRequestFactory _requestFactory;
         private readonly OAuth2ConfigurationSection _configurationSection;
+        private readonly IEnumerable<IClientConfiguration> _servicesSection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthorizationRoot" /> class.
@@ -22,7 +23,7 @@ namespace OAuth2
         /// So, despite we encourage you to employ IoC pattern, 
         /// you are still able to just create instance of manager manually and then use it in your project.
         /// </remarks>
-        public AuthorizationRoot() : 
+        public AuthorizationRoot() :
             this(new ConfigurationManager(), "oauth2", new RequestFactory())
         {
         }
@@ -34,15 +35,21 @@ namespace OAuth2
         /// <param name="configurationSectionName">Name of the configuration section.</param>
         /// <param name="requestFactory">The request factory.</param>
         public AuthorizationRoot(
-            IConfigurationManager configurationManager, 
-            string configurationSectionName, 
+            IConfigurationManager configurationManager,
+            string configurationSectionName,
             IRequestFactory requestFactory)
         {
             _requestFactory = requestFactory;
             _configurationSection = configurationManager
                 .GetConfigSection<OAuth2ConfigurationSection>(configurationSectionName);
         }
-        
+
+        public AuthorizationRoot(IEnumerable<IClientConfiguration> Services, IRequestFactory requestFactory)
+        {
+            _requestFactory = requestFactory;
+            _servicesSection = Services;
+        }
+
         /// <summary>
         /// Returns collection of clients which were configured 
         /// using application configuration file and are enabled.
@@ -51,18 +58,18 @@ namespace OAuth2
         {
             get
             {
-                    var types = this.GetClientTypes().ToList();
-                Func<ClientConfiguration, Type> getType = 
+                var types = this.GetClientTypes().ToList();
+                Func<IClientConfiguration, Type> getType =
                         configuration => types.FirstOrDefault(x => x.Name == configuration.ClientTypeName);
 
-                    return
-                        _configurationSection.Services.AsEnumerable()
-                                            .Where(configuration => configuration.IsEnabled)
-                                            .Select(configuration => new { configuration, type = getType(configuration) })
-                                            .Where(o => o.type != null)
-                                        .Select(o => (IClient)Activator.CreateInstance(o.type, _requestFactory, o.configuration));                
-                }
-                }
+                return
+                    (_servicesSection ?? _configurationSection.Services.AsEnumerable())
+                                        .Where(configuration => configuration.IsEnabled)
+                                        .Select(configuration => new { configuration, type = getType(configuration) })
+                                        .Where(o => o.type != null)
+                                    .Select(o => (IClient)Activator.CreateInstance(o.type, _requestFactory, o.configuration));
+            }
+        }
 
         /// <summary>
         /// Returns collection of client types to consider
