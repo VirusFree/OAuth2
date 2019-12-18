@@ -13,7 +13,7 @@
         <tags>OAuth2, OAuth, DigitalOcean, Facebook, Foursquare, GitHub, Google, Instagram, LinkedIn, MailRu, Odnoklassniki, Twitter, VK (Vkontakte), Windows Live, Yandex</tags>
         <dependencies>
             <dependency id="RestSharp" version="105.2.3" />
-            <dependency id="Newtonsoft.Json" version="7.0.1" />
+            <dependency id="Yodiwo.Json" version="10.0.0" />
         </dependencies>
     </metadata>
     <files>
