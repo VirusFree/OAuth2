@@ -129,22 +129,22 @@ namespace OAuth2.Client
                 return AccessToken;
             }
 
-            NameValueCollection parameters = new NameValueCollection();
-            if (!String.IsNullOrEmpty(refreshToken))
-            {
-                parameters.Add("refresh_token", refreshToken);
-            }
-            else if (!String.IsNullOrEmpty(RefreshToken))
-            {
-                parameters.Add("refresh_token", RefreshToken);
-            }
+                NameValueCollection parameters = new NameValueCollection();
+                if (!String.IsNullOrEmpty(refreshToken))
+                {
+                    parameters.Add("refresh_token", refreshToken);
+                }
+                else if (!String.IsNullOrEmpty(RefreshToken))
+                {
+                    parameters.Add("refresh_token", RefreshToken);
+                }
 
-            if (parameters.Count > 0)
-            {
-                GrantType = "refresh_token";
+                if (parameters.Count > 0)
+                {
+                    GrantType = "refresh_token";
                 await QueryAccessTokenAsync(parameters, cancellationToken).ConfigureAwait(false);
-                return AccessToken;
-            }
+                    return AccessToken;
+                }
             throw new Exception("Token never fetched and refresh token not provided.");
         }
 
@@ -206,8 +206,7 @@ namespace OAuth2.Client
             if (String.IsNullOrEmpty(AccessToken))
                 throw new UnexpectedResponseException(AccessTokenKey);
 
-            if (GrantType != "refresh_token")
-                RefreshToken = ParseTokenResponse(response.Content, RefreshTokenKey);
+            RefreshToken = ParseTokenResponse(response.Content, RefreshTokenKey) ?? RefreshTokenKey;
 
             TokenType = ParseTokenResponse(response.Content, TokenTypeKey);
 
@@ -313,6 +312,6 @@ namespace OAuth2.Client
             CheckErrorAndSetState(parameters);
             await QueryAccessTokenAsync(parameters, cancellationToken).ConfigureAwait(false);
             return await GetUserInfoAsync(cancellationToken).ConfigureAwait(false);
-        }
+    }
     }
 }
