@@ -215,34 +215,33 @@ namespace OAuth2.Client
             if (String.IsNullOrEmpty(AccessToken))
                 throw new UnexpectedResponseException(AccessTokenKey);
 
-            if (GrantType != "refresh_token")
-                RefreshToken = ParseTokenResponse(response.Content, RefreshTokenKey);
+            RefreshToken = ParseTokenResponse(response.Content, RefreshTokenKey) ?? RefreshTokenKey;
 
             TokenType = ParseTokenResponse(response.Content, TokenTypeKey);
-            
+
             int expiresIn;
             if (Int32.TryParse(ParseTokenResponse(response.Content, ExpiresKey), out expiresIn))
                 ExpiresAt = DateTime.Now.AddSeconds(expiresIn);
         }
 
-		protected virtual string ParseTokenResponse(string content, string key)
-		{
-		    if (String.IsNullOrEmpty(content) || String.IsNullOrEmpty(key))
-		        return null;
+        protected virtual string ParseTokenResponse(string content, string key)
+        {
+            if (String.IsNullOrEmpty(content) || String.IsNullOrEmpty(key))
+                return null;
 
-			try
-			{
-				// response can be sent in JSON format
-				var token = JObject.Parse(content).SelectToken(key);
-				return token != null ? token.ToString() : null;
-			}
-			catch (JsonReaderException)
-			{
-				// or it can be in "query string" format (param1=val1&param2=val2)
-				var collection = HttpUtility.ParseQueryString(content);
-				return collection[key];
-			}
-		}
+            try
+            {
+                // response can be sent in JSON format
+                var token = JObject.Parse(content).SelectToken(key);
+                return token != null ? token.ToString() : null;
+            }
+            catch (JsonReaderException)
+            {
+                // or it can be in "query string" format (param1=val1&param2=val2)
+                var collection = HttpUtility.ParseQueryString(content);
+                return collection[key];
+            }
+        }
 
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content received from provider.
