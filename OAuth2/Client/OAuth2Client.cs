@@ -27,7 +27,7 @@ namespace OAuth2.Client
         /// <summary>
         /// Client configuration object.
         /// </summary>
-        public IClientConfiguration Configuration { get; private set; }
+        public IClientConfiguration Configuration { get; protected set; }
 
         /// <summary>
         /// Friendly name of provider (OAuth2 service).
@@ -37,29 +37,29 @@ namespace OAuth2.Client
         /// <summary>
         /// State (any additional information that was provided by application and is posted back by service).
         /// </summary>
-        public string State { get; private set; }
+        public string State { get; protected set; }
 
         /// <summary>
         /// Access token returned by provider. Can be used for further calls of provider API.
         /// </summary>
-        public string AccessToken { get; private set; }
+        public string AccessToken { get; protected set; }
 
         /// <summary>
         /// Refresh token returned by provider. Can be used for further calls of provider API.
         /// </summary>
-        public string RefreshToken { get; private set; }
+        public string RefreshToken { get; protected set; }
 
         /// <summary>
         /// Token type returned by provider. Can be used for further calls of provider API.
         /// </summary>
-        public string TokenType { get; private set; }
+        public string TokenType { get; protected set; }
 
         /// <summary>
         /// Seconds till the token expires returned by provider. Can be used for further calls of provider API.
         /// </summary>
-        public DateTime ExpiresAt { get; private set; }
+        public DateTime ExpiresAt { get; protected set; }
 
-        private string GrantType { get; set; }
+        protected string GrantType { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Client"/> class.
